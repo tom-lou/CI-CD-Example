@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-import jwt
+import jwt, os
 from datetime import datetime, timedelta
 
 app = Flask(__name__)
@@ -11,6 +11,12 @@ def generate_token():
     payload = {'exp': expiration_time}
     token = jwt.encode(payload, app.config['SECRET_KEY'], algorithm='HS256')
     return token
+
+
+@app.route('/', methods=['GET'])
+def welcome():
+
+    return "App is up and running", 200
 
 
 @app.route('/get_token', methods=['GET'])
@@ -50,4 +56,4 @@ def multiply():
 if __name__ == '__main__':
     # app.run(debug=True)
 
-    app.run(host = "0.0.0.0", port = 5000)
+    app.run(host = "0.0.0.0", port = os.environ.get("PORT", 8000))
